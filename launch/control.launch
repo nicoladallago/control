@@ -1,0 +1,22 @@
+<launch>  
+
+    <node pkg="ros_kflytelemetry" name="ros_kflytelemetry" type="ros_kflytelemetry_node" output="screen">
+        <!-- Motion capture reference for the frame KFly is mounted to -->
+        <param name="motioncapture_publisher" value="/vicon/KFly_1/KFly_1" />
+        
+        <!-- The rate at which the motion capture data will be sent to KFly -->
+        <param name="motioncapture_send_rate" value="1" /> <!-- In Hz -->
+        
+        <!-- KFly prefix for distinguishing multiple boards -->
+        <param name="kfly_prefix" value="kfly_1" />
+        
+        <!-- KFly port name -->
+        <param name="kfly_port" value="/dev/ttyUSB0" />
+        
+        <!-- KFly baudrate -->
+        <param name="kfly_baudrate" value="57600" />
+    </node>
+
+    <node pkg="control" name="control" type="control_node" output="screen"> </node>
+
+</launch>
