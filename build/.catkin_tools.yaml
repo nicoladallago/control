@@ -1,6 +1,0 @@
-devel_space: /home/nicola/control/devel
-install: false
-install_space: /home/nicola/control/install
-profile: default
-source_space: /home/nicola/control/src
-workspace: /home/nicola/control
