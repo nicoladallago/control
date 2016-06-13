@@ -3,7 +3,7 @@
 
 namespace control {
 
-	void ControlNode::ViconCallback(const geometry_msgs::TransformStampedPtr& msg) {
+	/*void ControlNode::ViconCallback(const geometry_msgs::TransformStampedPtr& msg) {
 		position_vicon_.x() = msg->transform.translation.x;
 		position_vicon_.y() = msg->transform.translation.y;
 		position_vicon_.z() = msg->transform.translation.z;
@@ -20,7 +20,7 @@ namespace control {
 
         // frame number
         vicon_frame_number = msg->header.seq;
-	}
+	}*/
 
     void ControlNode::KflyCallBack(const ros_kflytelemetry::IMUDataPtr& msg) {
         rate_kfly_.x() = msg->angular_rate.x;
@@ -59,13 +59,13 @@ namespace control {
 		speed_msg_pub_ = nh.advertise<ros_kflytelemetry::DirectReference>(
 			"/kfly_1/DirectReference", 5);
 
-		// subscriber for the kfly Gyrooscope signals and ManageSubscription
+		// subscriber for the kfly IMU signals and ManageSubscription
         kfly_manage_sub_.request.port = 1;         // 1 xbee, 0 usb
-        kfly_manage_sub_.request.cmd = 44;         // 54 = getIMUData
+        kfly_manage_sub_.request.cmd = 44;         // 44 = getIMUData
         kfly_manage_sub_.request.subscribe = true; // true
-        kfly_manage_sub_.request.delta_ms = 20; 
+        kfly_manage_sub_.request.delta_ms = 10; 
 
-        kfly_sub_ = nh.subscribe("/kfly_1/GyroscopeData", 10, 
+        kfly_sub_ = nh.subscribe("/kfly_1/IMUData", 10, 
             &ControlNode::KflyCallBack, this, ros::TransportHints().tcpNoDelay());
 
         ros::ServiceClient client = nh.serviceClient<ros_kflytelemetry::
@@ -80,8 +80,8 @@ namespace control {
         }*/
 
     	// connect to the vicon node
-    	vicon_stream_sub = nh.subscribe("/vicon/darotor/darotor", 10, 
-    		&ControlNode::ViconCallback, this, ros::TransportHints().tcpNoDelay());    
+    	/*vicon_stream_sub = nh.subscribe("/vicon/darotor/darotor", 10, 
+    		&ControlNode::ViconCallback, this, ros::TransportHints().tcpNoDelay()); */
 
         // wait for 2 seconds to make sure that the vicon can connect
         std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -91,7 +91,7 @@ namespace control {
 	ControlNode::~ControlNode() {}    	
 
 	void ControlNode::Shuttdown(ros_kflytelemetry::DirectReference kfly_motor_speed_msg) {
-		boost::array<double, 4> rotor_speed_kfly;
+		boost::array<double, 8> rotor_speed_kfly;
 		rotor_speed_kfly[0] = 0;
     	rotor_speed_kfly[1] = 0;
     	rotor_speed_kfly[2] = 0;
@@ -205,7 +205,7 @@ int main(int argc, char** argv) {
     const bool logs_control_side = true;
     bool initial_calibration = false;
 
-    unsigned int control_frequency = 50;
+    unsigned int control_frequency = 100;
 	const long double PI = 3.141592653589793238L;
 
     unsigned int iteration_number = 0;
@@ -236,7 +236,7 @@ int main(int argc, char** argv) {
 	Eigen::Vector3d initial_position;
 	double initial_yaw = 0;
 	double initial_time = ros::Time::now().toSec();
-    boost::array<double, 4> rotor_speed_kfly; // array for the kfly output
+    boost::array<double, 8> rotor_speed_kfly; // array for the kfly output
     
     /*
     	CONTROL LOOP

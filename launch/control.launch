@@ -11,7 +11,7 @@
         <param name="kfly_prefix" value="kfly_1" />
         
         <!-- KFly port name -->
-        <param name="kfly_port" value="/dev/ttyUSB0" />
+        <param name="kfly_port" value="/dev/ttyACM0" />
         
         <!-- KFly baudrate -->
         <param name="kfly_baudrate" value="57600" />
