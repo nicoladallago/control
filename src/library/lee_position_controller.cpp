@@ -20,10 +20,10 @@ namespace control {
 		NormalizeControlGains();
 
 		Eigen::Matrix4d mixing;
-		mixing << beta_1_,       beta_1_,      beta_1_,       beta_1_,
-		d_y_*beta_3_,  d_y_*beta_3_, -d_y_*beta_3_, -d_y_*beta_3_,
-		-d_x_*beta_2_, d_x_*beta_2_, d_x_*beta_2_,  -d_x_*beta_2_,
-		-beta_7_,      beta_7_,      -beta_7_,      beta_7_;
+		mixing <<       beta_1_,       beta_1_,       beta_1_,       beta_1_,
+				   d_y_*beta_3_,  d_y_*beta_3_, -d_y_*beta_3_, -d_y_*beta_3_,
+				  -d_x_*beta_2_,  d_x_*beta_2_,  d_x_*beta_2_, -d_x_*beta_2_,
+				  	   -beta_7_,       beta_7_,      -beta_7_,       beta_7_;
 
 		mixing_matrix_ = mixing.inverse();
 		return;
@@ -233,7 +233,7 @@ namespace control {
 			debug_file << "debug cs: motor 3: " << rotors_speed(2) << "\n";
 			debug_file << "debug cs: motor 4: " << rotors_speed(3) << "\n";
 		}
-					
+
 		return rotors_speed;
 	}
 }
